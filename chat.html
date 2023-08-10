@@ -1,22 +1,69 @@
 <head><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1"></head>
-<body><script type='text/javascript'>
-	function initEmbeddedMessaging() {
-		try {
-			embeddedservice_bootstrap.settings.language = 'en_US'; // For example, enter 'en' or 'en-US'
+<body><style type='text/css'>
+	.embeddedServiceHelpButton .helpButton .uiButton {
+		background-color: #016341;
+		font-family: "Salesforce Sans", sans-serif;
+	}
+	.embeddedServiceHelpButton .helpButton .uiButton:focus {
+		outline: 1px solid #016341;
+	}
+	@font-face {
+		font-family: 'Salesforce Sans';
+		src: url('https://c1.sfdcstatic.com/etc/clientlibs/sfdc-aem-master/clientlibs_base/fonts/SalesforceSans-Regular.woff') format('woff'),
+		url('https://c1.sfdcstatic.com/etc/clientlibs/sfdc-aem-master/clientlibs_base/fonts/SalesforceSans-Regular.ttf') format('truetype');
+	}
+</style>
 
-			embeddedservice_bootstrap.init(
-				'00D23000000GBtZ',
-				'AC_IEC_EnhancedBot',
-				'https://algonquincollege--dchatbot01.sandbox.my.site.com/ESWACIECEnhancedBot1691614296974',
-				{
-					scrt2URL: 'https://algonquincollege--dchatbot01.sandbox.my.salesforce-scrt.com'
-				}
-			);
-		} catch (err) {
-			console.error('Error loading Embedded Messaging: ', err);
-		}
+<script type='text/javascript' src='https://service.force.com/embeddedservice/5.0/esw.min.js'></script>
+<script type='text/javascript'>
+	var initESW = function(gslbBaseURL) {
+		embedded_svc.settings.displayHelpButton = true; //Or false
+		embedded_svc.settings.language = ''; //For example, enter 'en' or 'en-US'
+
+		//embedded_svc.settings.defaultMinimizedText = '...'; //(Defaults to Chat with an Expert)
+		//embedded_svc.settings.disabledMinimizedText = '...'; //(Defaults to Agent Offline)
+
+		//embedded_svc.settings.loadingText = ''; //(Defaults to Loading)
+		//embedded_svc.settings.storageDomain = 'yourdomain.com'; //(Sets the domain for your deployment so that visitors can navigate subdomains during a chat session)
+
+		// Settings for Chat
+		//embedded_svc.settings.directToButtonRouting = function(prechatFormData) {
+			// Dynamically changes the button ID based on what the visitor enters in the pre-chat form.
+			// Returns a valid button ID.
+		//};
+		//embedded_svc.settings.prepopulatedPrechatFields = {}; //Sets the auto-population of pre-chat form fields
+		//embedded_svc.settings.fallbackRouting = []; //An array of button IDs, user IDs, or userId_buttonId
+		//embedded_svc.settings.offlineSupportMinimizedText = '...'; //(Defaults to Contact Us)
+
+		embedded_svc.settings.enabledFeatures = ['LiveAgent'];
+		embedded_svc.settings.entryFeature = 'LiveAgent';
+
+		embedded_svc.init(
+			'https://algonquincollege--dchatbot01.sandbox.my.salesforce.com',
+			'https://algonquincollege--dchatbot01.sandbox.my.site.com/sfdctest',
+			gslbBaseURL,
+			'00D23000000GBtZ',
+			'AC_IEC_Bot',
+			{
+				baseLiveAgentContentURL: 'https://c.la1-c1cs-ia2.salesforceliveagent.com/content',
+				deploymentId: '57223000000CbIz',
+				buttonId: '57323000000Cb2M',
+				baseLiveAgentURL: 'https://d.la1-c1cs-ia2.salesforceliveagent.com/chat',
+				eswLiveAgentDevName: 'EmbeddedServiceLiveAgent_Parent04I23000000CaflEAC_1892af6f0ec',
+				isOfflineSupportEnabled: false
+			}
+		);
 	};
-</script>
-<script type='text/javascript' src='https://algonquincollege--dchatbot01.sandbox.my.site.com/ESWACIECEnhancedBot1691614296974/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
 
+	if (!window.embedded_svc) {
+		var s = document.createElement('script');
+		s.setAttribute('src', 'https://algonquincollege--dchatbot01.sandbox.my.salesforce.com/embeddedservice/5.0/esw.min.js');
+		s.onload = function() {
+			initESW(null);
+		};
+		document.body.appendChild(s);
+	} else {
+		initESW('https://service.force.com');
+	}
+</script>
 </body>
